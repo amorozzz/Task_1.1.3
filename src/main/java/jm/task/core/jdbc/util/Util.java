@@ -5,25 +5,22 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    public static Connection getOracleConnection() throws SQLException, ClassNotFoundException {
-        String hostName = "localhost";
+    private final static String HOSTNAME = "localhost";
+    private final static String DB_NAME = "user_db";
+    private final static String USERNAME = "root";
+    private final static String PASSWORD = "9086878Aa";
+    private static Connection conn;
 
-        String dbName = "user_db";
-        String userName = "root";
-        String password = "9086878Aa";
-
-        return getMySQLConnection(hostName, dbName, userName, password);
-    }
-
-    public static Connection getMySQLConnection(String hostName, String dbName,
-                                                String userName, String password) throws SQLException, ClassNotFoundException {
+    public static Connection getMySQLConnection() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-
-        String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName;
-
-        Connection conn = DriverManager.getConnection(connectionURL, userName,
-                password);
-
+        String connectionURL = "jdbc:mysql://" + HOSTNAME + ":3306/" + DB_NAME;
+        conn = DriverManager.getConnection(connectionURL, USERNAME,
+                PASSWORD);
         return conn;
     }
+
+    public static void closeConnection() throws SQLException {
+        conn.close();
+    }
+
 }

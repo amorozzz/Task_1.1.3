@@ -12,7 +12,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     {
         try {
-            connection = Util.getOracleConnection();
+            connection = Util.getMySQLConnection();
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -57,9 +57,10 @@ public class UserDaoJDBCImpl implements UserDao {
 }
 
     public void removeUserById(long id) {
-        try (Statement statement = connection.createStatement()) {
-            String SQL = "DELETE FROM users WHERE id=" + id;
-            statement.executeUpdate(SQL);
+        String insertQuery = "DELETE FROM users WHERE id=?";
+        try (PreparedStatement pstmt = connection.prepareStatement(insertQuery)) {
+            pstmt.setLong(1, id);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
